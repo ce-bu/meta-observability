@@ -1,0 +1,13 @@
+Index: gcc-9.3.0/gcc/config.gcc
+===================================================================
+--- gcc-9.3.0.orig/gcc/config.gcc
++++ gcc-9.3.0/gcc/config.gcc
+@@ -635,7 +635,7 @@ x86_64-*-*)
+ 		tm_defines="${tm_defines} USE_IX86_CLD=1"
+ 	fi
+ 	if test "x$enable_frame_pointer" = xyes; then
+-		tm_defines="${tm_defines} USE_IX86_FRAME_POINTER=1"
++		tm_defines="${tm_defines} USE_X86_64_FRAME_POINTER=1"
+ 	fi
+ 	;;
+ arm*-*-*)

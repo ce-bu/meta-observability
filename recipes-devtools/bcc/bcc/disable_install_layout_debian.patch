@@ -1,0 +1,15 @@
+Index: git/src/python/CMakeLists.txt
+===================================================================
+--- git.orig/src/python/CMakeLists.txt
++++ git/src/python/CMakeLists.txt
+@@ -5,10 +5,6 @@ if(NOT PYTHON_CMD)
+   set(PYTHON_CMD "python")
+ endif()
+ 
+-if(EXISTS "/etc/debian_version")
+-  set(PYTHON_FLAGS "${PYTHON_FLAGS} --install-layout deb")
+-endif()
+-
+ file(GLOB_RECURSE PYTHON_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+   ${CMAKE_CURRENT_SOURCE_DIR}/*.py)
+ file(GLOB_RECURSE PYTHON_INCLUDES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
