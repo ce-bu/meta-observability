@@ -3,25 +3,35 @@ HOMEPAGE = "http://llvm.org"
 LICENSE = "Apache-2.0-with-LLVM-exception"
 SECTION = "devel"
 
-MAJOR_VERSION = "9"
+MAJOR_VERSION = "11"
 MINOR_VERSION = "0"
 PATCH_VERSION = "1"
 
 PV = "${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}"
 
-
 BRANCH = "release/${MAJOR_VERSION}.x"
-SRCREV = "c1a0a213378a458fbea1a5c77b315c7dce08fd05"
+SRCREV = "43ff75f2c3feef64f9d73328230d34dac8832a91"
 SRC_URI = "git://github.com/llvm/llvm-project.git;branch=${BRANCH} \
-           file://0006-llvm-TargetLibraryInfo-Undefine-libc-functions-if-th.patch;striplevel=2 \
-           file://0007-llvm-allow-env-override-of-exe-path.patch;striplevel=2 \
-           file://0001-AsmMatcherEmitter-sort-ClassInfo-lists-by-name-as-we.patch;striplevel=2 \
            "
-
 LIC_FILES_CHKSUM = "file://LICENSE.TXT;md5=8a15a0759ef07f2682d2ba4b893c9afe"
 
 S = "${WORKDIR}/git/llvm"
 
+LLVM_PARALLEL_LINK_JOBS ??= "1"
+
+EXTRA_OECMAKE += "\
+                  -DLLVM_ENABLE_EXPENSIVE_CHECKS=OFF \
+                  -DLLVM_ENABLE_ASSERTIONS=OFF \
+                  -DLLVM_OPTIMIZED_TABLEGEN=ON \
+                  -DCMAKE_BUILD_TYPE=Release \
+                  -DLLVM_PARALLEL_LINK_JOBS=${LLVM_PARALLEL_LINK_JOBS} \
+                  -DLLVM_USE_LINKER=gold \
+                  -DLLVM_INCLUDE_EXAMPLES=OFF \
+                  -DLLVM_BUILD_TESTS=OFF \
+                  -DLLVM_INCLUDE_TESTS=OFF \
+                  -DLLVM_BUILD_EXAMPLES=OFF \
+                  -G Ninja"
+                  
 def get_llvm_arch(bb, d, arch_var):
     import re
     a = d.getVar(arch_var)
@@ -41,3 +51,5 @@ def get_llvm_host_arch(bb, d):
 
 def get_llvm_target_arch(bb, d):
     return get_llvm_arch(bb, d, 'TARGET_ARCH')
+
+INHIBIT_PACKAGE_DEBUG_SPLIT = "1"

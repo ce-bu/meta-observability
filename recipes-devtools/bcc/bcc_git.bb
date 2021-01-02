@@ -8,13 +8,11 @@ inherit cmake python3native
 DEPENDS += "bison-native \
             flex-native \
             elfutils \
-            clang-cross-${TARGET_ARCH} \
+            clang \
             luajit \
             iputils \
             flex \
             "
-RDEPENDS_${PN} = "python3"
-
 RDEPENDS_${PN} += "bash python3 python3-core python3-setuptools xz"
 
 SRC_URI = "git://github.com/iovisor/bcc \
@@ -25,12 +23,16 @@ SRCREV = "297512a31ecc9ceebf79bda169350dace0f36757"
 
 S = "${WORKDIR}/git"
 
-export LLVM_DIR = "${STAGING_DIR_NATIVE}/opt/clang-cross-${TARGET_ARCH}"
+export LLVM_DIR = "${STAGING_DIR_TARGET}/opt/clang"
     
+OECMAKE_RPATH = "/opt/clang/lib"
 
 EXTRA_OECMAKE = " \
-              -DENABLE_MAN=OFF \
-              -DPYTHON_CMD=${PYTHON} \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DENABLE_LLVM_SHARED=ON \
+    -DENABLE_MAN=OFF \
+    -DPYTHON_CMD=${PYTHON} \
+    -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold \
 "
 
 FILES_${PN} += "${PYTHON_SITEPACKAGES_DIR}"
@@ -39,3 +41,4 @@ do_install_append() {
      find ${D}${datadir} -type f -exec sed -i {} -e 's,#!/usr/bin/python,#!/usr/bin/env python3,' \;
 }
 
+INHIBIT_PACKAGE_DEBUG_SPLIT = "1"

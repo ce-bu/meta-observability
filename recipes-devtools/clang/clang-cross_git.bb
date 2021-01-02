@@ -1,6 +1,6 @@
 # https://llvm.org/docs/HowToCrossCompileLLVM.html
 
-DEPENDS = "libffi libxml2 zlib libedit ninja-native clang-native"
+DEPENDS = "ninja-native clang-native"
 
 inherit cmake pkgconfig cross
 require clang.inc
@@ -11,13 +11,13 @@ LLVM_PROJECTS ?= "clang"
 
 PN = "clang-cross-${TARGET_ARCH}"
 
-CLANG_DIR_NATIVE = "${STAGING_DIR_NATIVE}/clang-native-${PV}"
+package_prefix = "${base_prefix}/opt/${PN}"
+
+CLANG_DIR_NATIVE = "${STAGING_DIR_NATIVE}/opt/clang-native"
 EXTRA_OECMAKE += "\
-                  -DCMAKE_INSTALL_PREFIX=${STAGING_DIR_NATIVE}/opt/${PN} \
-                  -DLLVM_ENABLE_EXPENSIVE_CHECKS=OFF \
+                  -DCMAKE_INSTALL_PREFIX=${package_prefix} \
                   -DPYTHON_EXECUTABLE=${HOSTTOOLS_DIR}/python3 \
                   -DLLVM_ENABLE_PROJECTS='${LLVM_PROJECTS}' \
-                  -DCMAKE_BUILD_TYPE=Release \
                   -DCMAKE_CROSSCOMPILING:BOOL=ON \
                   -DLLVM_TABLEGEN=${CLANG_DIR_NATIVE}/bin/llvm-tblgen \
                   -DCLANG_TABLEGEN=${CLANG_DIR_NATIVE}/bin/clang-tblgen \
@@ -25,15 +25,13 @@ EXTRA_OECMAKE += "\
                   -DLLVM_TARGETS_TO_BUILD='${LLVM_TARGETS}' \
                   -DLLVM_TARGET_ARCH=${@get_llvm_target_arch(bb, d)} \
                   -DLLVM_DEFAULT_TARGET_TRIPLE=${TARGET_SYS} \
-                  -G Ninja"
+                  -DLLVM_ENABLE_RTTI=ON \
+                  "
                   
-FILES_${PN} += "${D}/${STAGING_DIR_NATIVE}/opt/${PN}"
-
-SYSROOT_DIRS += "${STAGING_DIR_NATIVE}/opt/${PN}"
+SYSROOT_DIRS += "${package_prefix}"
 
 do_install() {
-   install -d ${D}${STAGING_DIR_NATIVE}/opt/${PN}
-   DESTDIR='${D}' cmake --build '${B}'  --target install
+    DESTDIR='${D}' cmake --build '${B}'  --target install
     for f in `find ${D}/${STAGING_DIR_NATIVE}/opt/${PN}/bin -executable -type f -not -type l`; do
         test -n "`file -b $f|grep -i ELF`" && ${STRIP} $f
         echo "stripped $f"

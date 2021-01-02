@@ -10,9 +10,10 @@ This Yocto layer enables support for performance analysis (Perf, BPF, Hyper-V).
 ## Overview
 
 Current features:
-- compile GCC and system with frame pointers enabled so we can collect proper stack traces.
-- **clang-cross** recipe to build the CLang cross compiler needed for BPF programs.
 - [BPF Compiler Collection](https://github.com/iovisor/bcc)
+- [bpftrace](https://github.com/iovisor/bpftrace)
+- compile GCC and system with frame pointers enabled so we can collect proper stack traces.
+- **clang** recipes to build the CLang cross/native/target compiler needed for BPF.
 - **bpftool** and **libbpf** from Linux kernel.
 
 
@@ -86,7 +87,7 @@ VIRTUAL-RUNTIME_init_manager = "systemd"
 DISTRO_FEATURES_BACKFILL_CONSIDERED = "sysvinit"
 
 # Add BPF tools
-IMAGE_INSTALL_append += "bpftool bcc"
+IMAGE_INSTALL_append += "bpftool bcc bpftrace"
 
 # Add Hyper-V support (see meta-observability/recipes-kernel/linux/linux-yocto_%.bbappend )
 MACHINE_FEATURES += "hyperv"
@@ -132,6 +133,11 @@ while [ 1 ]; do : ; done &
 Use tools from BCC:
 ```
 /usr/share/bcc/tools/biolatency
+```
+
+bpftrace one-liners:
+```
+bpftrace -e 'tracepoint:syscalls:sys_enter_open { printf("%s %s\n", comm, str(args->filename)); }'
 ```
 
 Use perf to capture stack traces:

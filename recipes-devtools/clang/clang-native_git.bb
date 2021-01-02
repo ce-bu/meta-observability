@@ -1,6 +1,4 @@
-
-
-DEPENDS = "libffi libxml2 zlib libedit ninja-native"
+DEPENDS = "ninja-native"
 
 inherit cmake pkgconfig native
 require clang.inc
@@ -9,30 +7,28 @@ require clang.inc
 LLVM_TARGETS ?= "${@get_llvm_host_arch(bb, d)}"
 LLVM_PROJECTS ?= "clang"
 
+package_prefix = "${base_prefix}/opt/clang-native"
 
 EXTRA_OECMAKE += "\
-                  -DCMAKE_INSTALL_PREFIX=${STAGING_DIR_NATIVE}/clang-native-${PV} \
-                  -DLLVM_ENABLE_EXPENSIVE_CHECKS=OFF \
-                  -DLLVM_ENABLE_ASSERTIONS=OFF \
+                  -DCMAKE_INSTALL_PREFIX=${package_prefix}\
                   -DLLVM_TARGETS_TO_BUILD='${LLVM_TARGETS}' \
                   -DPYTHON_EXECUTABLE=${HOSTTOOLS_DIR}/python3 \
                   -DLLVM_ENABLE_PROJECTS='${LLVM_PROJECTS}' \
-                  -DCMAKE_BUILD_TYPE=Release \
-                  -G Ninja"
+                  "
 
-
-FILES_${PN} += "${D}/${STAGING_DIR_NATIVE}/clang-native-${PV}"
+OECMAKE_RPATH_prepend = "${package_prefix}/lib:"
 
 do_install_append() {
-    install -Dm 0755 ${B}/bin/clang-tblgen ${D}/${STAGING_DIR_NATIVE}/clang-native-${PV}/bin/clang-tblgen
-    install -Dm 0755 ${B}/bin/llvm-tblgen ${D}/${STAGING_DIR_NATIVE}/clang-native-${PV}/bin/llvm-tblgen
-    for f in `find ${D}/${STAGING_DIR_NATIVE}/clang-native-${PV}/bin -executable -type f -not -type l`; do
+    install -Dm 0755 ${B}/bin/clang-tblgen ${D}${package_prefix}/bin/clang-tblgen
+    install -Dm 0755 ${B}/bin/llvm-tblgen ${D}${package_prefix}/bin/llvm-tblgen
+    for f in `find ${D}${package_prefix}/bin -executable -type f -not -type l`; do
         test -n "`file -b $f|grep -i ELF`" && ${STRIP} $f
         echo "stripped $f"
     done
     
 }
 
-SYSROOT_DIRS += "${STAGING_DIR_NATIVE}/clang-native-${PV}"
+SYSROOT_DIRS_NATIVE += "${package_prefix}"
 
 INSANE_SKIP_${PN} += "already-stripped"
+
