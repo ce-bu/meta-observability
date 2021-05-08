@@ -1,11 +1,12 @@
 # meta-observability
 
-This Yocto layer enables support for performance analysis (Perf, BPF, Hyper-V).
+This Yocto layer enables support for performance analysis (Perf, BPF, BCC, Hyper-V).
 
 - [Overview](#overview)
 - [Setup](#setup)
 - [Building the image](#building-the-image)
 - [Testing](#testing)
+- [Resources](#resources)
 
 ## Overview
 
@@ -17,9 +18,11 @@ Current features:
 - **bpftool** and **libbpf** from Linux kernel.
 
 
-I used [Yocto](https://www.yoctoproject.org/)  **gatesgarth** branch. 
-The build host Ubuntu 20. 
-I tested the OS image in a Hyper-V machine.
+I try to track [Yocto](https://www.yoctoproject.org/) and have a branch matching Yocto version. So far I have it working on:
+- hardknott
+- gatesgarth
+
+The build host Ubuntu 20.10.  I tested the OS image in a Hyper-V machine (2nd gen).
 
 ## Setup
 
@@ -28,19 +31,21 @@ Create a working folder and checkout Yocto **gatesgarth** branch:
 sudo mkdir -p /yocto
 sudo chmod 0777 /yocto
 cd /yocto
-git clone -b gatesgarth git://git.yoctoproject.org/poky.git
+git clone -b hardknott git://git.yoctoproject.org/poky.git
 ```
 
 This layer depends on [meta-openembedded layer](https://github.com/openembedded/meta-openembedded.git). To add this layer to the project:
 ```
 cd /yocto
-git clone -b gatesgarth https://github.com/openembedded/meta-openembedded.git
+git clone -b hardknott https://github.com/openembedded/meta-openembedded.git
 ```
 
 Clone [meta-observability](https://github.com/ce-bu/meta-observability.git) layer:
 ```
 cd /yocto
 git clone https://github.com/ce-bu/meta-observability.git
+cd /yocto/poky
+. oe-init-build-env
 ```
 
 Edit the **/yocto/poky/build/conf/bblayers.conf** and add the required layers:
@@ -57,8 +62,8 @@ BBLAYERS ?= " \
 Checkout the Yocto kernel and metadata. Note that this step is optional but it allows you to have custom kernel sources.
 ```
 cd /yocto
-git clone -b v5.8/standard/base git://git.yoctoproject.org/linux-yocto
-git clone -b yocto-5.8 git://git.yoctoproject.org/yocto-kernel-cache
+git clone -b v5.10/standard/base git://git.yoctoproject.org/linux-yocto
+git clone -b yocto-5.10 git://git.yoctoproject.org/yocto-kernel-cache
 ```
 
 
@@ -75,8 +80,8 @@ EXTRA_IMAGE_FEATURES = "debug-tweaks dbg-pkgs dev-pkgs tools-sdk tools-debug too
 MACHINE_ESSENTIAL_EXTRA_RRECOMMENDS += "kernel-modules"
 
 # Use a custom kernel (optional)
-SRC_URI_pn-linux-yocto = "git:///yocto/linux-yocto;protocol=file;name=machine;branch=v5.8/standard/base; \
-                          git:///yocto/yocto-kernel-cache;protocol=file;type=kmeta;name=meta;branch=yocto-5.8;destsuffix=${KMETA}"
+SRC_URI_pn-linux-yocto = "git:///yocto/linux-yocto;protocol=file;name=machine;branch=v5.10/standard/base; \
+                          git:///yocto/yocto-kernel-cache;protocol=file;type=kmeta;name=meta;branch=yocto-5.10;destsuffix=${KMETA}"
 SRCREV_meta_genericx86-64 = "${AUTOREV}"
 SRCREV_machine_genericx86-64 = "${AUTOREV}"
 KERNEL_VERSION_SANITY_SKIP="1"
@@ -114,11 +119,11 @@ Convert the image to **vhdx** format using **qemu-img** utility:
 qemu-img convert -f raw -O vhdx genericx86.wks-202012290029-sda.direct poky.vhdx
 ```
 
-You can attach **poky.vhdx** to a Hyper-V machine. You need to disable secure boot.
+You can attach **poky.vhdx** to a Hyper-V machine (Image MUST be 2nd gen). You need to disable secure boot.
 
 On Ubuntu **qemu-img** utility is part of **qemu-tools** package:
 ```
-sudo apt install qemu-tools
+sudo apt install qemu-utils
 ```
 
 ## Testing
@@ -144,3 +149,12 @@ Use perf to capture stack traces:
 ```
 perf record -a -g -- sleep 4; perf script
 ```
+
+## Resources
+
+- [Brendan D. Gregg](http://www.brendangregg.com/overview.html) the performance tools grandmaster.
+- [BPF Performance Tools](https://amzn.to/2OWoQQX) book by Brendan D. Gregg 
+- [Linux Observability with BPF: Advanced Programming for Performance Analysis and Networking](https://www.amazon.ca/Linux-Observability-BPF-Programming-Performance/dp/1492050202) by David Calavera and Lorenzo Fontana is also very good.
+- [XDP Tutorial Project](https://github.com/xdp-project/xdp-tutorial.git) is very well structured and teaches you the BPF with focus on XDP. 
+
+

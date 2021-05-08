@@ -19,7 +19,7 @@ RDEPENDS_${PN} = "clang-libclang"
 SRC_URI = "git://github.com/iovisor/bpftrace \
            "
 
-SRCREV = "9f7ee99b5443c0c37fd6813c203620ea7a78b5e3"
+SRCREV = "74efdfac35b2e91bb1579e7b75cd47df7938fe4a"
 
 S = "${WORKDIR}/git"
 
@@ -31,6 +31,7 @@ EXTRA_OECMAKE = " \
     -DENABLE_MAN=OFF \
     -DPYTHON_CMD=${PYTHON} \
     -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold \
+    -DBUILD_TESTING=OFF \
 "
 
 INHIBIT_PACKAGE_DEBUG_SPLIT = "1"

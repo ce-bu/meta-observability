@@ -19,7 +19,7 @@ SRC_URI = "git://github.com/iovisor/bcc \
           file://disable_install_layout_debian.patch \
            "
 
-SRCREV = "297512a31ecc9ceebf79bda169350dace0f36757"
+SRCREV = "34695249bb0ac7e16dc171053211c63f6212e8e1"
 
 S = "${WORKDIR}/git"
 

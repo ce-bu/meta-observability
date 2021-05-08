@@ -3,14 +3,14 @@ HOMEPAGE = "http://llvm.org"
 LICENSE = "Apache-2.0-with-LLVM-exception"
 SECTION = "devel"
 
-MAJOR_VERSION = "11"
+MAJOR_VERSION = "12"
 MINOR_VERSION = "0"
 PATCH_VERSION = "1"
 
 PV = "${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}"
 
 BRANCH = "release/${MAJOR_VERSION}.x"
-SRCREV = "43ff75f2c3feef64f9d73328230d34dac8832a91"
+SRCREV = "a1a197b54ec6686963b4e56ee8117dd79679ec4a"
 SRC_URI = "git://github.com/llvm/llvm-project.git;branch=${BRANCH} \
            "
 LIC_FILES_CHKSUM = "file://LICENSE.TXT;md5=8a15a0759ef07f2682d2ba4b893c9afe"
