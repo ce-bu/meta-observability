@@ -4,8 +4,6 @@ LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0;md5=801f80980d171dd6425610833a22dbe6"
 PROVIDES = "virtual/libbpf"
 
-
-
 DEPENDS += "elfutils"
 
 RDEPENDS_${PN}   += "elfutils glibc"
@@ -59,7 +57,7 @@ do_compile() {
 }
 
 
-python do_package_prepend() {
+python do_package:prepend() {
     d.setVar('PKGV', d.getVar("KERNEL_VERSION", True).split("-")[0])
 }
 

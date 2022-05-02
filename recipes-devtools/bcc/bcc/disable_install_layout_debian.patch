@@ -1,9 +1,9 @@
-Index: git/src/python/CMakeLists.txt
+Index: bcc/src/python/CMakeLists.txt
 ===================================================================
---- git.orig/src/python/CMakeLists.txt
-+++ git/src/python/CMakeLists.txt
+--- bcc.orig/src/python/CMakeLists.txt
++++ bcc/src/python/CMakeLists.txt
 @@ -5,10 +5,6 @@ if(NOT PYTHON_CMD)
-   set(PYTHON_CMD "python")
+   set(PYTHON_CMD "python3")
  endif()
  
 -if(EXISTS "/etc/debian_version")

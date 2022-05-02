@@ -1,0 +1,12 @@
+Index: llvm/lib/Support/Triple.cpp
+===================================================================
+--- llvm/lib/Support/Triple.cpp
++++ llvm/lib/Support/Triple.cpp
+@@ -507,6 +507,7 @@ static Triple::VendorType parseVendor(St
+     .Case("mesa", Triple::Mesa)
+     .Case("suse", Triple::SUSE)
+     .Case("oe", Triple::OpenEmbedded)
++    .Case("poky", Triple::OpenEmbedded)
+     .Default(Triple::UnknownVendor);
+ }
+ 

@@ -8,7 +8,7 @@ python fixoeconf() {
     d.setVar('EXTRA_OECONF', tmp)
 }
 
-do_configure_append() {
+do_configure:append() {
          tmp=${@bb.build.exec_func("fixoeconf", d)}
 }
 

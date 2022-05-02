@@ -1,2 +1,2 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
-EXTRA_OECONF_append = " --enable-frame-pointer"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
+EXTRA_OECONF:append = " --enable-frame-pointer"

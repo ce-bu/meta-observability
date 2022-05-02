@@ -1,0 +1,98 @@
+set(Python3_EXECUTABLE "" CACHE STRING "")
+
+set(CMAKE_BUILD_TYPE Release CACHE STRING "")
+set(CMAKE_CROSSCOMPILING ON CACHE BOOL "")
+
+set(CLANG_DEFAULT_LINKER lld CACHE STRING "")
+set(CLANG_DEFAULT_OBJCOPY llvm-objcopy CACHE STRING "")
+set(CLANG_DEFAULT_RTLIB compiler-rt CACHE STRING "")
+set(CLANG_DEFAULT_CXX_STDLIB libc++ CACHE STRING "")
+set(CLANG_INCLUDE_TESTS OFF CACHE BOOL "")
+
+set(LLVM_ENABLE_PROJECTS "clang;clang-tools-extra;lld;llvm" CACHE STRING "")
+set(LLVM_ENABLE_RUNTIMES "compiler-rt;libcxx;libcxxabi;libunwind" CACHE STRING "")
+set(LLVM_TARGETS_TO_BUILD "BPF;X86" CACHE STRING "")
+set(LLVM_ENABLE_RTTI ON CACHE BOOL "")
+set(LLVM_ENABLE_EH ON CACHE BOOL "")
+set(LLVM_INCLUDE_DOCS OFF CACHE BOOL "")
+set(LLVM_INCLUDE_EXAMPLES OFF CACHE BOOL "")
+set(LLVM_INCLUDE_UTILS OFF CACHE BOOL "")
+set(LLVM_INCLUDE_TESTS OFF CACHE BOOL "")
+set(LLVM_BUILD_LLVM_DYLIB ON CACHE BOOL "")
+set(LLVM_LINK_LLVM_DYLIB ON CACHE BOOL "")
+
+set(COMPILER_RT_USE_BUILTINS_LIBRARY OFF CACHE BOOL "")
+set(COMPILER_RT_INCLUDE_TESTS OFF CACHE BOOL "")
+set(COMPILER_RT_TERMINFO_LIB OFF CACHE BOOL "")
+set(COMPILER_RT_BUILD_SANITIZERS OFF CACHE BOOL "")
+set(COMPILER_RT_BUILD_XRAY OFF CACHE BOOL "")
+set(COMPILER_RT_BUILD_CRT ON CACHE BOOL "")
+set(COMPILER_RT_BUILD_PROFILE OFF CACHE BOOL "")
+set(COMPILER_RT_BUILD_MEMPROF OFF CACHE BOOL "")
+set(COMPILER_RT_BUILD_ORC OFF CACHE BOOL "")
+set(COMPILER_RT_BUILD_GWP_ASAN OFF CACHE BOOL "")
+set(COMPILER_RT_DEFAULT_TARGET_ONLY ON CACHE BOOL "")
+  
+set(LIBUNWIND_ENABLE_SHARED OFF CACHE BOOL "")
+set(LIBUNWIND_INSTALL_LIBRARY OFF CACHE BOOL "")
+set(LIBUNWIND_USE_COMPILER_RT ON CACHE BOOL "")
+set(LIBCXXABI_ENABLE_SHARED OFF CACHE BOOL "")
+set(LIBCXXABI_ENABLE_STATIC_UNWINDER ON CACHE BOOL "")
+set(LIBCXXABI_INSTALL_LIBRARY OFF CACHE BOOL "")
+set(LIBCXXABI_USE_COMPILER_RT ON CACHE BOOL "")
+set(LIBCXXABI_USE_LLVM_UNWINDER ON CACHE BOOL "")
+set(LIBCXX_ENABLE_SHARED OFF CACHE BOOL "")
+set(LIBCXX_ENABLE_STATIC_ABI_LIBRARY ON CACHE BOOL "")
+set(LIBCXX_USE_COMPILER_RT ON CACHE BOOL "")
+
+
+set(LLVM_TOOLCHAIN_TOOLS
+  dsymutil
+  llvm-ar
+  #llvm-cov
+  llvm-cxxfilt
+  llvm-dlltool
+  llvm-dwarfdump
+  llvm-dwp
+  llvm-ifs
+  llvm-gsymutil
+  llvm-lib
+  #llvm-libtool-darwin
+  #llvm-lipo
+  #llvm-mt
+  llvm-nm
+  llvm-objcopy
+  llvm-objdump
+  llvm-otool
+  #llvm-pdbutil
+  #llvm-profdata
+  #llvm-rc
+  llvm-ranlib
+  llvm-readelf
+  llvm-readobj
+  llvm-size
+  llvm-strip
+  #llvm-symbolizer
+  #llvm-xray
+  #sancov
+  scan-build-py
+  CACHE STRING "")
+
+set(LLVM_DISTRIBUTION_COMPONENTS
+  clang
+  lld
+  clang-resource-headers
+  clang-include-fixer
+  builtins
+  runtimes
+  ${LLVM_TOOLCHAIN_TOOLS}
+
+  # LLVM
+  cmake-exports
+  llvm-headers
+  llvm-libraries
+  # Clang
+  clang-cmake-exports
+  clang-headers
+  clang-libraries  
+  CACHE STRING "")

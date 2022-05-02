@@ -43,9 +43,9 @@ do_compile() {
     oe_runmake
 }
 
-FILES_${PN} += "/usr/share*"
+FILES:${PN} += "/usr/share*"
 
-python do_package_prepend() {
+python do_package:prepend() {
     d.setVar('PKGV', d.getVar("KERNEL_VERSION", True).split("-")[0])
 }
 
